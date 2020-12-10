@@ -35,14 +35,29 @@ class App extends Component {
   };
 
   deleteContact = idContact => {
-    this.setState(({contacts}) => ({
+    this.setState(({ contacts }) => ({
       contacts: contacts.filter(contact => contact.id !== idContact)
     }));
-  }
+  };
 
   chengeFilter = event => {
-    this.setState({filter: event.currentTarget.value});
-  }
+    this.setState({ filter: event.currentTarget.value });
+  };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parseContacts = JSON.parse(contacts);
+    if (parseContacts) {
+      this.setState({ contacts: parseContacts });
+    }
+    
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  };
 
   render() {
     const { contacts, filter } = this.state;
